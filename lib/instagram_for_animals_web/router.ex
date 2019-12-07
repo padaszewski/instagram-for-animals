@@ -13,14 +13,11 @@ defmodule InstagramForAnimalsWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", InstagramForAnimalsWeb do
-    pipe_through :browser
-
-    get "/", PageController, :index
-  end
-
   # Other scopes may use custom stacks.
-  # scope "/api", InstagramForAnimalsWeb do
-  #   pipe_through :api
-  # end
+   scope "/api", InstagramForAnimalsWeb do
+     pipe_through :api
+
+     resources "/Photos", PhotoController, only: [:index, :show]
+#     get "/projects/:slug", InstagramForAnimalsWeb.PhotoController, :show
+   end
 end
