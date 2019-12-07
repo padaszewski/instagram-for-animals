@@ -13,11 +13,17 @@ defmodule InstagramForAnimalsWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :json_api do
+    plug :accepts, ["json-api"]
+    plug JaSerializer.Deserializer
+  end
+
   # Other scopes may use custom stacks.
    scope "/api", InstagramForAnimalsWeb do
      pipe_through :api
 
-     resources "/Photos", PhotoController, only: [:index, :show]
+     resources "/photos", PhotoController, only: [:index, :show]
+     resources "/comments", CommentController, only: [:index, :show]
 #     get "/projects/:slug", InstagramForAnimalsWeb.PhotoController, :show
    end
 end

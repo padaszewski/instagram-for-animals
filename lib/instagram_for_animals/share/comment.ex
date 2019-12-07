@@ -3,14 +3,16 @@ defmodule InstagramForAnimals.Share.Comment do
   import Ecto.Changeset
 
   schema "comments" do
+    field :content, :string
 
+    belongs_to :photo, InstagramForAnimals.Share.Photo
     timestamps()
   end
 
   @doc false
   def changeset(comment, attrs) do
     comment
-    |> cast(attrs, [])
-    |> validate_required([])
+    |> cast(attrs, [:content, :photo_id])
+    |> validate_required([:content])
   end
 end

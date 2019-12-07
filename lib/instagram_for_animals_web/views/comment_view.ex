@@ -11,6 +11,10 @@ defmodule InstagramForAnimalsWeb.CommentView do
   end
 
   def render("comment.json", %{comment: comment}) do
-    %{id: comment.id}
+    %{
+      id: comment.id,
+      content: comment.content,
+      photo_id: comment.photo_id
+    }
   end
 end

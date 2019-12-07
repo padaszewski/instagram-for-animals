@@ -3,7 +3,8 @@ defmodule InstagramForAnimals.Repo.Migrations.CreateComments do
 
   def change do
     create table(:comments) do
-
+      add :photo_id, references(:photos)
+      add :content, :text
       timestamps()
     end
 
