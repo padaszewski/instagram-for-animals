@@ -43,4 +43,5 @@ defmodule InstagramForAnimalsWeb.Endpoint do
     signing_salt: "f7qPeU4t"
 
   plug InstagramForAnimalsWeb.Router
+  plug Plug.Static, at: "/uploads", from: "/media"
 end

@@ -20,10 +20,10 @@ defmodule InstagramForAnimalsWeb.Router do
 
   # Other scopes may use custom stacks.
    scope "/api", InstagramForAnimalsWeb do
-     pipe_through :api
+     pipe_through :json_api
 
-     resources "/photos", PhotoController, only: [:index, :show]
-     resources "/comments", CommentController, only: [:index, :show]
+     resources "/photos", PhotoController, only: [:index, :show, :create, :new]
+     resources "/comments", CommentController, only: [:index, :show, :create]
 #     get "/projects/:slug", InstagramForAnimalsWeb.PhotoController, :show
    end
 end

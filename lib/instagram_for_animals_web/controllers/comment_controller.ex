@@ -8,7 +8,7 @@ defmodule InstagramForAnimalsWeb.CommentController do
 
   def index(conn, _params) do
     comments = Share.list_comments()
-    render(conn, "index.json", comments: comments)
+    render(conn, "index.json-api", data: comments)
   end
 
   def create(conn, %{"comment" => comment_params}) do
@@ -16,20 +16,20 @@ defmodule InstagramForAnimalsWeb.CommentController do
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.comment_path(conn, :show, comment))
-      |> render("show.json", comment: comment)
+      |> render("show.json-api", data: comment)
     end
   end
 
   def show(conn, %{"id" => id}) do
     comment = Share.get_comment!(id)
-    render(conn, "show.json", comment: comment)
+    render(conn, "show.json-api", data: comment)
   end
 
   def update(conn, %{"id" => id, "comment" => comment_params}) do
     comment = Share.get_comment!(id)
 
     with {:ok, %Comment{} = comment} <- Share.update_comment(comment, comment_params) do
-      render(conn, "show.json", comment: comment)
+      render(conn, "show.json-api", data: comment)
     end
   end
 
