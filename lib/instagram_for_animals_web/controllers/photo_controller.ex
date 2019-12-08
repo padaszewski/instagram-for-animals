@@ -19,28 +19,35 @@ defmodule InstagramForAnimalsWeb.PhotoController do
         size = File.stat!(upload.path).size
         extension = Path.extname(upload.filename)
         project_root = File.cwd!
-        current_time = :os.system_time(:millisecond)
-        save_path = "/media/#{current_time}#{extension}"
+        filename = :os.system_time(:millisecond)
+        save_path = "/media/user-id-#{conn.assigns.current_user.id}/"
+        case File.exists?("#{project_root}#{save_path}") do
+          false -> File.mkdir!("#{project_root}#{save_path}")
+          _ -> IO.inspect "Directory exists already."
+        end
+        save_path = "/media/user-id-#{conn.assigns.current_user.id}/#{filename}#{extension}"
         case extension do
           ".jpg" -> File.cp(upload.path, "#{project_root}#{save_path}")
           ".png" -> File.cp(upload.path, "#{project_root}#{save_path}")
           ".jpeg" -> File.cp(upload.path, "#{project_root}#{save_path}")
           ".bmp" -> File.cp(upload.path, "#{project_root}#{save_path}")
-          _ ->
+          _ -> IO.inspect "Unsupported extension!"
         end
 
-        %{content_type: content_type, size: size, path: save_path}
+        %{content_type: content_type, size: size, path: save_path, extension: extension, filename: filename}
       end
 
     changes =
-      cond do
-        changes == nil -> changes = %{content_type: "invalid", size: "0", path: ""}
-        true -> changes = changes
+      case changes do
+        nil -> %{content_type: "invalid", size: "0", path: ""}
+        _ -> changes
       end
 
     photo_params = Map.put(photo_params, "content_type", changes.content_type)
     photo_params = Map.put(photo_params, "size", changes.size)
     photo_params = Map.put(photo_params, "path", changes.path)
+    photo_params = Map.put(photo_params, "extension", changes.extension)
+    photo_params = Map.put(photo_params, "filename", "#{changes.filename}")
 
 
     IO.inspect photo_params
