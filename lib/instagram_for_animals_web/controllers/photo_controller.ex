@@ -43,11 +43,13 @@ defmodule InstagramForAnimalsWeb.PhotoController do
         _ -> changes
       end
 
-    photo_params = Map.put(photo_params, "content_type", changes.content_type)
-    photo_params = Map.put(photo_params, "size", changes.size)
-    photo_params = Map.put(photo_params, "path", changes.path)
-    photo_params = Map.put(photo_params, "extension", changes.extension)
-    photo_params = Map.put(photo_params, "filename", "#{changes.filename}")
+    photo_params =
+      photo_params
+      |> Map.put("content_type", changes.content_type)
+      |> Map.put("size", changes.size)
+      |> Map.put("path", changes.path)
+      |> Map.put("extension", changes.extension)
+      |> Map.put("filename", "#{changes.filename}")
 
 
     IO.inspect photo_params
