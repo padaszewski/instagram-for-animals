@@ -12,19 +12,43 @@ defmodule InstagramForAnimalsWeb.PhotoController do
   end
 
   def create(conn, %{"photo" => photo_params}) do
-    IO.inspect conn.assigns.current_user.id
-    if upload = photo_params["file"] do
-      IO.inspect("im here")
-      extension = Path.extname(upload.filename)
-      project_root = File.cwd!
-      current_time = :os.system_time(:millisecond)
-      var = File.cp(upload.path, "#{project_root}/media/#{current_time}#{extension}")
-    end
+    photo_params = Map.put(photo_params, "user_id", conn.assigns.current_user.id)
+    changes =
+      if upload = photo_params["file"] do
+        content_type = upload.content_type
+        size = File.stat!(upload.path).size
+        extension = Path.extname(upload.filename)
+        project_root = File.cwd!
+        current_time = :os.system_time(:millisecond)
+        save_path = "/media/#{current_time}#{extension}"
+        case extension do
+          ".jpg" -> File.cp(upload.path, "#{project_root}#{save_path}")
+          ".png" -> File.cp(upload.path, "#{project_root}#{save_path}")
+          ".jpeg" -> File.cp(upload.path, "#{project_root}#{save_path}")
+          ".bmp" -> File.cp(upload.path, "#{project_root}#{save_path}")
+          _ ->
+        end
+
+        %{content_type: content_type, size: size, path: save_path}
+      end
+
+    changes =
+      cond do
+        changes == nil -> changes = %{content_type: "invalid", size: "0", path: ""}
+        true -> changes = changes
+      end
+
+    photo_params = Map.put(photo_params, "content_type", changes.content_type)
+    photo_params = Map.put(photo_params, "size", changes.size)
+    photo_params = Map.put(photo_params, "path", changes.path)
+
+
+    IO.inspect photo_params
     with {:ok, %Photo{} = photo} <- Share.create_photo(photo_params) do
       conn
-                 |> put_status(:created)
-                 |> put_resp_header("location", Routes.photo_path(conn, :show, photo))
-                 |> render("show.json-api", data: photo)
+      |> put_status(:created)
+      |> put_resp_header("location", Routes.photo_path(conn, :show, photo))
+      |> render("show.json-api", data: photo)
     end
   end
 

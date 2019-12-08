@@ -5,8 +5,13 @@ defmodule InstagramForAnimals.Share.Photo do
   schema "photos" do
     field :description, :string
     field :path, :string
+    #    field :filename, :string
+    field :size, :integer
+    field :content_type, :string
+    #    field :extension, :string
 
-#    belongs_to :user, InstagramForAnimals.Users.User
+    belongs_to :user, InstagramForAnimals.Users.User
+    has_many :comments, InstagramForAnimals.Share.Comment
 
     timestamps()
   end
@@ -14,7 +19,9 @@ defmodule InstagramForAnimals.Share.Photo do
   @doc false
   def changeset(photo, attrs) do
     photo
-    |> cast(attrs, [:path, :description])
-    |> validate_required([:path, :description])
+    |> cast(attrs, [:path, :description, :user_id, :size, :content_type])
+    |> validate_required([:description, :user_id])
+    |> validate_number(:size, greater_than: 0, message: "Please provide a file.")
+    |> validate_inclusion(:content_type, ["image/jpeg", "image/jpg", "image/bmp", "image/png"], message: "Please provide a valid file with one of following formats: jpeg, jpg, bmp, png.")
   end
 end

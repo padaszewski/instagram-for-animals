@@ -6,6 +6,7 @@ defmodule InstagramForAnimals.Share.Comment do
     field :content, :string
 
     belongs_to :photo, InstagramForAnimals.Share.Photo
+    belongs_to :user, InstagramForAnimals.Users.User
     timestamps()
   end
 
