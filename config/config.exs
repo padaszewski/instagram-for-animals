@@ -10,6 +10,10 @@ use Mix.Config
 config :instagram_for_animals,
        ecto_repos: [InstagramForAnimals.Repo]
 
+config :instagram_for_animals, :pow,
+       user: InstagramForAnimals.Users.User,
+       repo: InstagramForAnimals.Repo
+
 # Configures the endpoint
 config :instagram_for_animals,
        InstagramForAnimalsWeb.Endpoint,
@@ -37,8 +41,7 @@ config :mime, :types, %{
 }
 
 config :phoenix, :format_encoders,
-  "json-api": Poison
-
+       "json-api": Poison
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

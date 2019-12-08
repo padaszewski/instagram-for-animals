@@ -42,6 +42,7 @@ defmodule InstagramForAnimalsWeb.Endpoint do
     key: "_instagram_for_animals_key",
     signing_salt: "f7qPeU4t"
 
+  plug Pow.Plug.Session, otp_app: :instagram_for_animals
+
   plug InstagramForAnimalsWeb.Router
-  plug Plug.Static, at: "/uploads", from: "/media"
 end

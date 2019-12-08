@@ -44,7 +44,8 @@ defmodule InstagramForAnimals.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:ja_serializer, github: "vt-elixir/ja_serializer"},
-      {:poison, "~> 3.1"}
+      {:poison, "~> 3.1"},
+      {:pow, "~> 1.0.15"}
     ]
   end
 

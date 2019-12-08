@@ -6,6 +6,8 @@ defmodule InstagramForAnimals.Share.Photo do
     field :description, :string
     field :path, :string
 
+#    belongs_to :user, InstagramForAnimals.Users.User
+
     timestamps()
   end
 

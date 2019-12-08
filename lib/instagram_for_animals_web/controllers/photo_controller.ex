@@ -12,7 +12,7 @@ defmodule InstagramForAnimalsWeb.PhotoController do
   end
 
   def create(conn, %{"photo" => photo_params}) do
-    IO.inspect photo_params
+    IO.inspect conn.assigns.current_user.id
     if upload = photo_params["file"] do
       IO.inspect("im here")
       extension = Path.extname(upload.filename)
