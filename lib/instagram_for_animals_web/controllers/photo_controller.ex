@@ -39,7 +39,7 @@ defmodule InstagramForAnimalsWeb.PhotoController do
 
     changes =
       case changes do
-        nil -> %{content_type: "invalid", size: "0", path: ""}
+        nil -> %{content_type: "invalid", size: "0", path: "", filename: "", extension: ""}
         _ -> changes
       end
 
