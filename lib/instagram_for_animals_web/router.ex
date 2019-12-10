@@ -31,7 +31,7 @@ defmodule InstagramForAnimalsWeb.Router do
     resources "/session", SessionController, singleton: true, only: [:create, :delete]
     post "/session/renew", SessionController, :renew
 
-    resources "/photos", PhotoController, only: [:index]
+    resources "/photos", PhotoController, only: [:index, :show]
   end
   # Other scopes may use custom stacks.
   scope "/api", InstagramForAnimalsWeb do

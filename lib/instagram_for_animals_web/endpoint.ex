@@ -13,7 +13,7 @@ defmodule InstagramForAnimalsWeb.Endpoint do
     at: "/",
     from: :instagram_for_animals,
     gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
+    only: ~w(css fonts images js favicon.ico robots.txt media)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

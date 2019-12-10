@@ -20,17 +20,20 @@ defmodule InstagramForAnimalsWeb.PhotoController do
         extension = Path.extname(upload.filename)
         project_root = File.cwd!
         filename = :os.system_time(:millisecond)
-        save_path = "/media/user-id-#{conn.assigns.current_user.id}/"
+        static_path = "/priv/static"
+        relative_path = "/images/media/user-id-#{conn.assigns.current_user.id}"
+        save_path = "#{static_path}#{relative_path}"
         case File.exists?("#{project_root}#{save_path}") do
-          false -> File.mkdir!("#{project_root}#{save_path}")
+          false -> File.mkdir_p!("#{project_root}/#{save_path}")
           _ -> IO.inspect "Directory exists already."
         end
-        save_path = "/media/user-id-#{conn.assigns.current_user.id}/#{filename}#{extension}"
+        copy_path = "#{save_path}/#{filename}#{extension}"
+        save_path = "#{relative_path}/#{filename}#{extension}"
         case extension do
-          ".jpg" -> File.cp(upload.path, "#{project_root}#{save_path}")
-          ".png" -> File.cp(upload.path, "#{project_root}#{save_path}")
-          ".jpeg" -> File.cp(upload.path, "#{project_root}#{save_path}")
-          ".bmp" -> File.cp(upload.path, "#{project_root}#{save_path}")
+          ".jpg" -> File.cp(upload.path, "#{project_root}#{copy_path}")
+          ".png" -> File.cp(upload.path, "#{project_root}#{copy_path}")
+          ".jpeg" -> File.cp(upload.path, "#{project_root}#{copy_path}")
+          ".bmp" -> File.cp(upload.path, "#{project_root}#{copy_path}")
           _ -> IO.inspect "Unsupported extension!"
         end
 
@@ -63,6 +66,8 @@ defmodule InstagramForAnimalsWeb.PhotoController do
 
   def show(conn, %{"id" => id}) do
     photo = Share.get_photo!(id)
+    photo = photo
+    |> Repo.preload([:comments])
     render(conn, "show.json-api", data: photo)
   end
 
