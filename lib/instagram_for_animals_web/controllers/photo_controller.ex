@@ -66,8 +66,6 @@ defmodule InstagramForAnimalsWeb.PhotoController do
 
   def show(conn, %{"id" => id}) do
     photo = Share.get_photo!(id)
-    photo = photo
-    |> Repo.preload([:comments])
     render(conn, "show.json-api", data: photo)
   end
 

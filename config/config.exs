@@ -37,7 +37,8 @@ config :logger,
        metadata: [:request_id]
 
 config :mime, :types, %{
-  "application/vnd.api+json" => ["json-api"]
+  "application/vnd.api+json" => ["json-api"],
+  "application/json" => ["json-api"]
 }
 
 config :phoenix, :format_encoders,

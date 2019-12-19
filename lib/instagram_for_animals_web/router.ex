@@ -32,6 +32,7 @@ defmodule InstagramForAnimalsWeb.Router do
     post "/session/renew", SessionController, :renew
 
     resources "/photos", PhotoController, only: [:index, :show]
+    resources "/comments", CommentController, only: [:index, :show]
   end
   # Other scopes may use custom stacks.
   scope "/api", InstagramForAnimalsWeb do

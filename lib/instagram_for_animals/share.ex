@@ -18,7 +18,9 @@ defmodule InstagramForAnimals.Share do
 
   """
   def list_photos do
-    Repo.all(Photo)
+    from(p in Photo, where: p.public == true)
+    |> Repo.all()
+    |> Repo.preload(:comments)
   end
 
   @doc """
@@ -35,7 +37,12 @@ defmodule InstagramForAnimals.Share do
       ** (Ecto.NoResultsError)
 
   """
-  def get_photo!(id), do: Repo.get!(Photo, id)
+  def get_photo!(id) do
+    photo =
+      Photo
+      |> Repo.get!(id)
+      |> Repo.preload(:comments)
+  end
 
   @doc """
   Creates a photo.
