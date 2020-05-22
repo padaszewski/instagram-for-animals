@@ -11,7 +11,8 @@ defmodule InstagramForAnimalsWeb.PhotoView do
     :filename,
     :extension,
     :comments,
-    :public
+    :public,
+    :username
   ]
 
 end

@@ -10,12 +10,29 @@ defmodule InstagramForAnimalsWeb.SessionController do
     |> Pow.Plug.authenticate_user(user_params)
     |> case do
          {:ok, conn} ->
-           json(conn, %{data: %{token: conn.private[:api_auth_token], renew_token: conn.private[:api_renew_token]}})
+           json(
+             conn,
+             %{
+               data: %{
+                 token: conn.private[:api_auth_token],
+                 renew_token: conn.private[:api_renew_token],
+                 id: conn.assigns.current_user.id,
+                 username: conn.assigns.current_user.email
+               }
+             }
+           )
 
          {:error, conn} ->
            conn
            |> put_status(401)
-           |> json(%{error: %{status: 401, message: "Invalid email or password"}})
+           |> json(
+                %{
+                  error: %{
+                    status: 401,
+                    message: "Invalid email or password"
+                  }
+                }
+              )
        end
   end
 
@@ -29,10 +46,25 @@ defmodule InstagramForAnimalsWeb.SessionController do
          {conn, nil} ->
            conn
            |> put_status(401)
-           |> json(%{error: %{status: 401, message: "Invalid token"}})
+           |> json(
+                %{
+                  error: %{
+                    status: 401,
+                    message: "Invalid token"
+                  }
+                }
+              )
 
          {conn, _user} ->
-           json(conn, %{data: %{token: conn.private[:api_auth_token], renew_token: conn.private[:api_renew_token]}})
+           json(
+             conn,
+             %{
+               data: %{
+                 token: conn.private[:api_auth_token],
+                 renew_token: conn.private[:api_renew_token]
+               }
+             }
+           )
        end
   end
 

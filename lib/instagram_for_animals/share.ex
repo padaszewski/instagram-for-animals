@@ -17,10 +17,26 @@ defmodule InstagramForAnimals.Share do
       [%Photo{}, ...]
 
   """
-  def list_photos do
+  def list_public_photos do
+    IO.inspect "ALL PUBLIC PHOTOS"
     from(p in Photo, where: p.public == true)
     |> Repo.all()
     |> Repo.preload(:comments)
+  end
+
+  def list_public_photos_with_user_privates(user_id) do
+    IO.inspect "PUBLIC AND PRIVATE PHOTOS OF USER"
+    from(p in Photo, where: p.user_id == ^user_id)
+    |> Repo.all()
+    |> Repo.preload(:comments)
+  end
+
+  def list_users_public_photos(user_id) do
+    IO.inspect "PUBLIC PHOTOS BY USER ID"
+    from(p in Photo, where: p.public == true and p.user_id == ^user_id)
+    |> Repo.all()
+    |> Repo.preload(:comments)
+
   end
 
   @doc """

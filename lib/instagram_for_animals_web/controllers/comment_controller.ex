@@ -12,6 +12,10 @@ defmodule InstagramForAnimalsWeb.CommentController do
   end
 
   def create(conn, %{"comment" => comment_params}) do
+    comment_params =
+      comment_params
+      |> Map.put("user_id", conn.assigns.current_user.id)
+      |> Map.put("username", conn.assigns.current_user.email)
     with {:ok, %Comment{} = comment} <- Share.create_comment(comment_params) do
       conn
       |> put_status(:created)

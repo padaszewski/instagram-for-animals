@@ -7,12 +7,25 @@ defmodule InstagramForAnimalsWeb.PhotoController do
   action_fallback InstagramForAnimalsWeb.FallbackController
 
   def index(conn, _params) do
-    photos = Share.list_photos()
+    IO.inspect conn
+    photos = case conn.assigns.current_user do
+      nil -> Share.list_public_photos()
+      _ -> Share.list_public_photos_with_user_privates(conn.assigns.current_user.id)
+    end
+
+    photos = case _params["user"] do
+      nil -> photos
+      _ -> Share.list_users_public_photos(_params["user"])
+    end
+
+
+
     render(conn, "index.json-api", data: photos)
   end
 
   def create(conn, %{"photo" => photo_params}) do
     photo_params = Map.put(photo_params, "user_id", conn.assigns.current_user.id)
+
     changes =
       if upload = photo_params["file"] do
         content_type = upload.content_type
@@ -53,9 +66,9 @@ defmodule InstagramForAnimalsWeb.PhotoController do
       |> Map.put("path", changes.path)
       |> Map.put("extension", changes.extension)
       |> Map.put("filename", "#{changes.filename}")
+      |> Map.put("username", conn.assigns.current_user.email)
 
 
-    IO.inspect photo_params
     with {:ok, %Photo{} = photo} <- Share.create_photo(photo_params) do
       conn
       |> put_status(:created)
@@ -65,8 +78,22 @@ defmodule InstagramForAnimalsWeb.PhotoController do
   end
 
   def show(conn, %{"id" => id}) do
+    IO.inspect conn
     photo = Share.get_photo!(id)
-    render(conn, "show.json-api", data: photo)
+    if photo.public == false do
+      current_user = conn.assigns.current_user
+      photo_user_id = photo.user_id
+      current_user_id = if current_user != nil do
+        current_user.id
+      end
+      case current_user_id do
+        nil -> InstagramForAnimalsWeb.APIAuthErrorHandler.call(conn, :not_authenticated)
+        current_user_id -> render(conn, "show.json-api", data: photo)
+        _ -> InstagramForAnimalsWeb.APIAuthErrorHandler.call(conn, :not_authenticated)
+      end
+    else
+      render(conn, "show.json-api", data: photo)
+    end
   end
 
   def update(conn, %{"id" => id, "photo" => photo_params}) do

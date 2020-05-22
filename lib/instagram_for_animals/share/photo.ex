@@ -10,6 +10,7 @@ defmodule InstagramForAnimals.Share.Photo do
     field :content_type, :string
     field :extension, :string
     field :public, :boolean
+    field :username, :string
 
     belongs_to :user, InstagramForAnimals.Users.User
     has_many :comments, InstagramForAnimals.Share.Comment
@@ -20,7 +21,7 @@ defmodule InstagramForAnimals.Share.Photo do
   @doc false
   def changeset(photo, attrs) do
     photo
-    |> cast(attrs, [:path, :description, :user_id, :size, :content_type, :extension, :filename, :public])
+    |> cast(attrs, [:path, :description, :user_id, :size, :content_type, :extension, :filename, :public, :username])
     |> validate_required([:description, :user_id, :public])
     |> validate_number(:size, greater_than: 0, message: "Please provide a file.")
     |> validate_inclusion(:content_type, ["image/jpeg", "image/jpg", "image/bmp", "image/png"], message: "Please provide a valid file with one of following formats: jpeg, jpg, bmp, png.")
