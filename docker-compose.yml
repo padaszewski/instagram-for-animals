@@ -1,0 +1,16 @@
+---
+version: '2'
+services:
+  app:
+    image: nicbet/phoenix:1.5.1
+    build: .
+    ports:
+      - "4000:4000"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+  db:
+    image: postgres:12
+    environment:
+        POSTGRES_HOST_AUTH_METHOD: "trust"
